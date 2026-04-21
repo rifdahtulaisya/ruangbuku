@@ -38,15 +38,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Bookings
         Route::resource('bookings', BookingController::class);
-        // TAMBAHAN INI
-    Route::post('bookings/{id}/approve', [BookingController::class, 'approve'])
-        ->name('bookings.approve');
-
-    Route::post('bookings/{id}/borrow', [BookingController::class, 'borrow'])
-        ->name('bookings.borrow');
-
-    Route::post('bookings/{id}/return', [BookingController::class, 'returnItem'])
-        ->name('bookings.return');
+        Route::post('bookings/{id}/approve', [BookingController::class, 'approve'])
+            ->name('bookings.approve');
+        Route::post('bookings/{id}/borrow', [BookingController::class, 'borrow'])
+            ->name('bookings.borrow');
+        Route::post('bookings/{id}/return', [BookingController::class, 'returnItem'])
+            ->name('bookings.return');
 
         // Profile
         Route::get('profile', [ProfileController::class, 'edit'])->name('profile');
