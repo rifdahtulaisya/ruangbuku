@@ -19,7 +19,7 @@
 
 </head>
 
-<body class="min-h-screen flex flex-col overflow-x-hidden bg-slate-50 text-slate-900">
+<body class="min-h-screen flex flex-col overflow-x-hidden bg-blue-100 text-slate-900">
     <!-- Sidebar -->
     <x-sidebar-admin />
 
@@ -114,6 +114,7 @@
     </script>
 
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         function confirmLogout() {

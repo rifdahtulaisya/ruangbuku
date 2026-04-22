@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-         Schema::create('bookings', function (Blueprint $table) {
+         Schema::create('loans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_users')->constrained('users');
-            $table->foreignId('id_rooms')->constrained('rooms');
+            $table->foreignId('id_books')->constrained('books');
             $table->date('tgl_pinjam');
             $table->date('tgl_kembali_rencana');
             $table->date('tgl_kembali_realisasi')->nullable();
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bookings');
+        Schema::dropIfExists('loans');
     }
 };

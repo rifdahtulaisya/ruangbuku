@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\RoomController;
-use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\BookController;
+use App\Http\Controllers\Admin\LoanController;
 use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\UserBookingController;
+use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\UserLoanController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,12 +20,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Booking
-    Route::get('/bookings', [UserBookingController::class, 'index'])->name('bookings');
-    Route::get('/bookings/history', [UserBookingController::class, 'history'])->name('bookings.history');
-    Route::post('/bookings', [UserBookingController::class, 'store'])->name('bookings.store');
-    Route::get('/bookingsdetail/{id}', [UserBookingController::class, 'show'])->name('bookingsdetail');
-    Route::post('/bookings/{id}/cancel', [UserBookingController::class, 'cancel'])->name('bookings.cancel');
+    // Loan
+    Route::get('/loans', [UserLoanController::class, 'index'])->name('loans');
+    Route::post('/loans', [UserLoanController::class, 'store'])->name('loans.store');
+    Route::get('/loans/history', [UserLoanController::class, 'history'])->name('loans.history');
+    Route::get('/loans/{id}', [UserLoanController::class, 'show'])->name('loans.show');
+    Route::delete('/loans/{id}/cancel', [UserLoanController::class, 'destroy'])->name('loans.cancel');
+    Route::post('/loans/{id}/return', [UserLoanController::class, 'returnBook'])->name('loans.return');
 
     // Admin
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
@@ -34,16 +36,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('dashboard');
 
         Route::resource('categories', CategoryController::class);
-        Route::resource('rooms', RoomController::class);
+        Route::resource('books', BookController::class);
 
-        // Bookings
-        Route::resource('bookings', BookingController::class);
-        Route::post('bookings/{id}/approve', [BookingController::class, 'approve'])
-            ->name('bookings.approve');
-        Route::post('bookings/{id}/borrow', [BookingController::class, 'borrow'])
-            ->name('bookings.borrow');
-        Route::post('bookings/{id}/return', [BookingController::class, 'returnItem'])
-            ->name('bookings.return');
+        // Loan
+        Route::resource('loans', LoanController::class);
+        Route::post('loans/{id}/approve', [LoanController::class, 'approve'])
+            ->name('loans.approve');
+        Route::post('loans/{id}/return', [LoanController::class, 'returnItem'])
+            ->name('loans.return');
+
+        // Members
+        Route::get('members/export-pdf', [MemberController::class, 'exportPDF'])->name('members.export-pdf');
+        Route::get('members/export-csv', [MemberController::class, 'export'])->name('members.export-csv');
+        Route::resource('members', MemberController::class);
 
         // Profile
         Route::get('profile', [ProfileController::class, 'edit'])->name('profile');

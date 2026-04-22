@@ -1,20 +1,20 @@
 @extends('layouts-admin.admin')
 
-@section('title', 'Admin | Tambah Ruangan')
+@section('title', 'Book Create')
 
 @section('content')
     <!-- HEADER BOX -->
     <div class="bg-white rounded-xl shadow p-5 mb-6">
         <div class="flex items-center gap-4">
             <!-- BACK BUTTON -->
-            <a href="{{ route('admin.rooms.index') }}"
+            <a href="{{ route('admin.books.index') }}"
                 class="w-10 h-10 flex items-center justify-center rounded-lg
-                  bg-stone-100 text-stone-600 hover:bg-stone-200 transition">
+                  bg-sky-50 text-sky-600 hover:bg-sky-100 transition">
                 <i class="fa-solid fa-arrow-left"></i>
             </a>
             <div>
-                <h1 class="text-xl font-semibold text-[#280905]">Tambah Ruangan</h1>
-                <p class="text-sm text-stone-500">Buat ruangan baru untuk kategori Anda</p>
+                <h1 class="text-xl font-semibold text-slate-900">Tambah Buku</h1>
+                <p class="text-sm text-slate-500">Tambahkan data buku baru</p>
             </div>
         </div>
     </div>
@@ -39,7 +39,7 @@
     <div class="flex flex-col lg:flex-row gap-6">
         <!-- FORM SECTION -->
         <div class="bg-white rounded-xl shadow p-6 flex-1">
-            <form action="{{ route('admin.rooms.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.books.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 {{-- Error global --}}
@@ -55,12 +55,12 @@
 
                 <!-- CATEGORY FIELD -->
                 <div class="mb-5">
-                    <label for="category_id" class="block text-sm font-medium text-[#280905] mb-2">
+                    <label for="category_id" class="block text-sm font-medium text-slate-700 mb-2">
                         Kategori <span class="text-red-500">*</span>
                     </label>
                     <select name="category_id" id="category_id" required
                         class="w-full px-4 py-2.5 border border-stone-300 rounded-lg
-                               focus:ring-2 focus:ring-[#A27B5C] focus:border-[#A27B5C]
+                               focus:ring-2 focus:ring-sky-300 focus:border-sky-400
                                bg-white">
                         <option value="">-- Pilih Kategori --</option>
                         @foreach ($categories as $category)
@@ -74,39 +74,54 @@
                     @enderror
                 </div>
 
-                <!-- ROOM NAME FIELD -->
+                <!-- BOOK TITLE FIELD -->
                 <div class="mb-5">
-                    <label for="room_name" class="block text-sm font-medium text-[#280905] mb-2">
-                        Nama Ruangan <span class="text-red-500">*</span>
+                    <label for="title" class="block text-sm font-medium text-slate-700 mb-2">
+                        Judul Buku <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" name="room_name" id="room_name" value="{{ old('room_name') }}" required
+                    <input type="text" name="title" id="title" value="{{ old('title') }}" required
                         class="w-full px-4 py-2.5 border border-stone-300 rounded-lg
-                               focus:ring-2 focus:ring-[#A27B5C] focus:border-[#A27B5C]
+                               focus:ring-2 focus:ring-sky-300 focus:border-sky-400
                                placeholder:text-stone-400"
-                        placeholder="Masukkan nama ruangan">
-                    @error('room_name')
+                        placeholder="Masukkan judul buku">
+                    @error('title')
                         <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- LOCATION FIELD -->
+                <!-- AUTHOR FIELD -->
                 <div class="mb-5">
-                    <label for="location" class="block text-sm font-medium text-[#280905] mb-2">
-                        Lokasi <span class="text-red-500">*</span>
+                    <label for="author" class="block text-sm font-medium text-slate-700 mb-2">
+                        Penulis <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" name="location" id="location" value="{{ old('location') }}" required
+                    <input type="text" name="author" id="author" value="{{ old('author') }}" required
                         class="w-full px-4 py-2.5 border border-stone-300 rounded-lg
-                               focus:ring-2 focus:ring-[#A27B5C] focus:border-[#A27B5C]
+                               focus:ring-2 focus:ring-sky-300 focus:border-sky-400
                                placeholder:text-stone-400"
-                        placeholder="Masukkan lokasi ruangan">
-                    @error('location')
+                        placeholder="Masukkan nama penulis">
+                    @error('author')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- STOCK FIELD -->
+                <div class="mb-5">
+                    <label for="stock" class="block text-sm font-medium text-slate-700 mb-2">
+                        Stok Buku <span class="text-red-500">*</span>
+                    </label>
+                    <input type="number" name="stock" id="stock" value="{{ old('stock') }}" required min="0"
+                        class="w-full px-4 py-2.5 border border-stone-300 rounded-lg
+                               focus:ring-2 focus:ring-sky-300 focus:border-sky-400
+                               placeholder:text-stone-400"
+                        placeholder="Masukkan jumlah stok">
+                    @error('stock')
                         <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- IMAGE FIELD -->
                 <div class="mb-6">
-                    <label for="image" class="block text-sm font-medium text-[#280905] mb-2">
+                    <label for="image" class="block text-sm font-medium text-slate-700 mb-2">
                         Gambar (Opsional)
                     </label>
                     <div class="flex items-center justify-center w-full">
@@ -114,7 +129,7 @@
                             class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-stone-300 rounded-lg cursor-pointer
                                    bg-stone-50 hover:bg-stone-100 transition">
                             <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                <i class="fa-solid fa-cloud-arrow-up text-3xl text-[#A27B5C] mb-2"></i>
+                                <i class="fa-solid fa-cloud-arrow-up text-3xl text-sky-600 mb-2"></i>
                                 <p class="text-sm text-stone-600">
                                     <span class="font-semibold">Klik untuk upload</span> atau drag & drop
                                 </p>
@@ -132,7 +147,7 @@
                 <!-- BUTTON SUBMIT -->
                 <div class="flex justify-end gap-3 pt-6 border-t border-stone-100">
                     <button type="submit"
-                        class="px-5 py-2.5 rounded-lg bg-[#280905] text-white hover:bg-[#A27B5C]
+                        class="px-5 py-2.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white
                            transition flex items-center gap-2">
                         <i class="fa-solid fa-floppy-disk"></i> Simpan
                     </button>
@@ -143,32 +158,35 @@
         <!-- INFO SECTION -->
         <div class="hidden lg:flex w-full lg:w-1/3 xl:w-1/4 flex-col items-center justify-center">
             <div class="bg-white rounded-xl shadow p-8 w-full h-full flex flex-col items-center justify-center">
+
                 <!-- Illustration -->
                 <div class="mb-6">
                     <div
-                        class="w-48 h-48 mx-auto bg-gradient-to-br from-[#A27B5C]/20 to-[#280905]/10 
-                        rounded-full flex items-center justify-center">
-                        <i class="fa-solid fa-door-open text-6xl text-[#A27B5C]"></i>
+                        class="w-40 h-40 mx-auto bg-gradient-to-br from-sky-100 to-sky-50 
+                rounded-full flex items-center justify-center">
+                        <i class="fa-solid fa-book text-5xl text-sky-600"></i>
                     </div>
                 </div>
 
                 <!-- Informasi -->
                 <div class="text-center">
-                    <h3 class="text-lg font-semibold text-[#280905] mb-2">Buat Ruangan Baru</h3>
+                    <h3 class="text-lg font-semibold text-sky-700 mb-2">Tambah Buku</h3>
+
+                    <p class="text-sm text-stone-500">
+                        Isi data buku dengan lengkap agar mudah dikelola dan ditemukan.
+                    </p>
 
                     <!-- Tips Box -->
-                    <div class="mt-6 p-4 bg-[#A27B5C]/10 rounded-lg border border-[#A27B5C]/20">
-                        <h4 class="text-sm font-medium text-[#280905] mb-2 flex items-center gap-2">
-                            <i class="fa-solid fa-lightbulb"></i> Tips Ruangan
-                        </h4>
+                    <div class="mt-5 p-3 bg-[#A27B5C]/10 rounded-lg border border-[#A27B5C]/20">
                         <ul class="text-xs text-stone-600 space-y-1 text-left">
-                            <li>• Pilih kategori yang sesuai dengan jenis ruangan</li>
-                            <li>• Gunakan nama ruangan yang deskriptif</li>
-                            <li>• Cantumkan lokasi yang jelas dan mudah ditemukan</li>
-                            <li>• Tambahkan gambar untuk visual yang lebih baik</li>
+                            <li>• Pilih kategori yang sesuai</li>
+                            <li>• Gunakan judul yang jelas</li>
+                            <li>• Isi penulis dengan benar</li>
+                            <li>• Tambahkan gambar (opsional)</li>
                         </ul>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -187,7 +205,7 @@
 
         // Drag and drop functionality
         const dropZone = document.querySelector('label[for="image"]');
-        
+
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dropZone.addEventListener(eventName, preventDefaults, false);
         });

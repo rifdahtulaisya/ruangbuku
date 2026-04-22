@@ -45,13 +45,7 @@
 
 
         <div>
-            © {{ date('Y') }} Sarprasku. All rights reserved.
-        </div>
-
-        <div class="flex gap-4">
-            <span>Version 1.0</span>
-            <span>•</span>
-            <span>Admin Panel</span>
+            © {{ date('Y') }} RuangBersama. All rights reserved.
         </div>
 
     </footer>

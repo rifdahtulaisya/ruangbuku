@@ -11,18 +11,18 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-   public function index(Request $request)
+    public function index(Request $request)
     {
         // Pagination - default 5 items per page
         $perPage = $request->input('per_page', 5);
-        
+
         // Search functionality
         $search = $request->input('search');
-        
+
         $categories = Category::when($search, function ($query, $search) {
             return $query->where('category_name', 'like', '%' . $search . '%');
         })->paginate($perPage);
-        
+
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -41,10 +41,11 @@ class CategoryController extends Controller
     {
         $request->validate([
             'category_names' => 'required|array',
-            'category_names.*' => 'required|string|max:255|unique:categories,category_name',
+            'category_names.*' => 'required|string|max:255|distinct|unique:categories,category_name',
         ], [
             'category_names.*.required' => 'Nama kategori tidak boleh kosong.',
-            'category_names.*.unique' => 'Salah satu kategori sudah ada.',
+            'category_names.*.distinct' => 'Nama kategori tidak boleh sama antar input.',
+            'category_names.*.unique'   => 'Kategori ":input" sudah ada.',
         ]);
 
         foreach ($request->category_names as $name) {

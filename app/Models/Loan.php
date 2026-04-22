@@ -1,16 +1,17 @@
 <?php
+// app/Models/Loan.php
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Booking extends Model
+class Loan extends Model
 {
-    protected $table = 'bookings';
+    protected $table = 'loans';
     
     protected $fillable = [
         'id_users',
-        'id_rooms',
+        'id_books',
         'tgl_pinjam',
         'tgl_kembali_rencana',
         'tgl_kembali_realisasi',
@@ -29,8 +30,14 @@ class Booking extends Model
         return $this->belongsTo(User::class, 'id_users');
     }
 
-    public function room()
+    public function book()
     {
-        return $this->belongsTo(Room::class, 'id_rooms');
+        return $this->belongsTo(Book::class, 'id_books');
     }
+
+    // Status constants
+    const STATUS_PENDING = 'pending';
+    const STATUS_BORROWED = 'borrowed';
+    const STATUS_RETURNED = 'returned';
+    const STATUS_CANCELLED = 'cancelled';
 }

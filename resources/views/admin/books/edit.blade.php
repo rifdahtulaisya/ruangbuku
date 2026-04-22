@@ -1,20 +1,20 @@
 @extends('layouts-admin.admin')
 
-@section('title', 'Admin | Edit Ruangan')
+@section('title', 'Book Edit')
 
 @section('content')
     <!-- HEADER BOX -->
     <div class="bg-white rounded-xl shadow p-5 mb-6">
         <div class="flex items-center gap-4">
             <!-- BACK BUTTON -->
-            <a href="{{ route('admin.rooms.index') }}"
+            <a href="{{ route('admin.books.index') }}"
                 class="w-10 h-10 flex items-center justify-center rounded-lg
-                  bg-stone-100 text-stone-600 hover:bg-stone-200 transition">
+                  bg-sky-50 text-sky-600 hover:bg-sky-100 transition">
                 <i class="fa-solid fa-arrow-left"></i>
             </a>
             <div>
-                <h1 class="text-xl font-semibold text-[#280905]">Edit Ruangan</h1>
-                <p class="text-sm text-stone-500">Perbarui informasi ruangan yang sudah ada</p>
+                <h1 class="text-xl font-semibold text-slate-900">Edit Buku</h1>
+                <p class="text-sm text-slate-500">Perbarui informasi buku yang sudah ada</p>
             </div>
         </div>
     </div>
@@ -37,7 +37,7 @@
 
     <!-- FORM CARD -->
     <div class="bg-white rounded-xl shadow p-6">
-        <form action="{{ route('admin.rooms.update', $room->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.books.update', $book->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -54,16 +54,16 @@
 
             <!-- CATEGORY FIELD -->
             <div class="mb-5">
-                <label for="category_id" class="block text-sm font-medium text-[#280905] mb-2">
+                <label for="category_id" class="block text-sm font-medium text-slate-700 mb-2">
                     Kategori <span class="text-red-500">*</span>
                 </label>
                 <select name="category_id" id="category_id" required
                     class="w-full px-4 py-2.5 border border-stone-300 rounded-lg
-                           focus:ring-2 focus:ring-[#A27B5C] focus:border-[#A27B5C]
-                           bg-white">
+                           focus:ring-2 focus:ring-sky-300 focus:border-sky-400
+                               bg-white">
                     <option value="">-- Pilih Kategori --</option>
                     @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" {{ old('category_id', $room->category_id) == $category->id ? 'selected' : '' }}>
+                        <option value="{{ $category->id }}" {{ old('category_id', $book->category_id) == $category->id ? 'selected' : '' }}>
                             {{ $category->category_name }}
                         </option>
                     @endforeach
@@ -73,50 +73,66 @@
                 @enderror
             </div>
 
-            <!-- ROOM NAME FIELD -->
+            <!-- BOOK TITLE FIELD -->
             <div class="mb-5">
-                <label for="room_name" class="block text-sm font-medium text-[#280905] mb-2">
-                    Nama Ruangan <span class="text-red-500">*</span>
+                <label for="title" class="block text-sm font-medium text-slate-700 mb-2">
+                    Judul Buku <span class="text-red-500">*</span>
                 </label>
-                <input type="text" name="room_name" id="room_name" value="{{ old('room_name', $room->room_name) }}" required
+                <input type="text" name="title" id="title" value="{{ old('title', $book->title) }}" required
                     class="w-full px-4 py-2.5 border border-stone-300 rounded-lg
-                           focus:ring-2 focus:ring-[#A27B5C] focus:border-[#A27B5C]
+                           focus:ring-2 focus:ring-sky-300 focus:border-sky-400
                            placeholder:text-stone-400"
-                    placeholder="Masukkan nama ruangan">
-                @error('room_name')
+                    placeholder="Masukkan judul buku">
+                @error('title')
                     <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
-            <!-- LOCATION FIELD -->
+            <!-- AUTHOR FIELD -->
             <div class="mb-5">
-                <label for="location" class="block text-sm font-medium text-[#280905] mb-2">
-                    Lokasi <span class="text-red-500">*</span>
+                <label for="author" class="block text-sm font-medium text-slate-700 mb-2">
+                    Penulis <span class="text-red-500">*</span>
                 </label>
-                <input type="text" name="location" id="location" value="{{ old('location', $room->location) }}" required
+                <input type="text" name="author" id="author" value="{{ old('author', $book->author) }}" required
                     class="w-full px-4 py-2.5 border border-stone-300 rounded-lg
-                           focus:ring-2 focus:ring-[#A27B5C] focus:border-[#A27B5C]
+                           focus:ring-2 focus:ring-sky-300 focus:border-sky-400
                            placeholder:text-stone-400"
-                    placeholder="Masukkan lokasi ruangan">
-                @error('location')
+                    placeholder="Masukkan nama penulis">
+                @error('author')
+                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- STOCK FIELD -->
+            <div class="mb-5">
+                <label for="stock" class="block text-sm font-medium text-slate-700 mb-2">
+                    Stok Buku <span class="text-red-500">*</span>
+                </label>
+                <input type="number" name="stock" id="stock" value="{{ old('stock', $book->stock) }}" required
+                    min="0"
+                    class="w-full px-4 py-2.5 border border-stone-300 rounded-lg
+                           focus:ring-2 focus:ring-sky-300 focus:border-sky-400
+                           placeholder:text-stone-400"
+                    placeholder="Masukkan jumlah stok buku">
+                @error('stock')
                     <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
             <!-- IMAGE SECTION -->
             <div class="mb-5">
-                <label class="block text-sm font-medium text-[#280905] mb-2">
-                    Gambar Ruangan
+                <label class="block text-sm font-medium text-slate-700 mb-2">
+                    Gambar Buku
                 </label>
                 
                 <!-- Container untuk menampilkan gambar (current atau preview) -->
                 <div id="imagePreviewContainer" class="mb-4">
-                    @if($room->image)
+                    @if($book->image)
                     <div id="currentImageWrapper">
                         <div class="flex items-start gap-4 p-3 bg-stone-50 rounded-lg border border-stone-200">
                             <div class="relative">
-                                <img src="{{ asset('storage/' . $room->image) }}" 
-                                     alt="{{ $room->room_name }}" 
+                                <img src="{{ asset('storage/' . $book->image) }}" 
+                                     alt="{{ $book->title }}" 
                                      id="currentImage"
                                      class="w-32 h-32 object-cover rounded-lg border border-stone-200">
                             </div>
@@ -132,7 +148,6 @@
                     </div>
                     @endif
                     
-                    <!-- Preview gambar baru (akan muncul saat upload) -->
                     <div id="newImagePreview" style="display: none;">
                         <div class="flex items-start gap-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
                             <div class="relative">
@@ -160,7 +175,7 @@
                         class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-stone-300 rounded-lg cursor-pointer
                                bg-stone-50 hover:bg-stone-100 transition">
                         <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <i class="fa-solid fa-cloud-arrow-up text-3xl text-[#A27B5C] mb-2"></i>
+                            <i class="fa-solid fa-cloud-arrow-up text-3xl text-sky-600 mb-2"></i>
                             <p class="text-sm text-stone-600">
                                 <span class="font-semibold">Klik untuk upload</span> atau drag & drop
                             </p>
@@ -177,15 +192,10 @@
 
             <!-- BUTTON SUBMIT -->
             <div class="flex justify-end gap-3 pt-6 border-t border-stone-100">
-                <a href="{{ route('admin.rooms.index') }}"
-                    class="px-5 py-2.5 rounded-lg bg-stone-200 text-stone-700 hover:bg-stone-300
-                  transition flex items-center gap-2">
-                    <i class="fa-solid fa-times"></i> Batal
-                </a>
                 <button type="submit"
-                    class="px-5 py-2.5 rounded-lg bg-[#280905] text-white hover:bg-[#A27B5C]
+                    class="px-5 py-2.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white
                        transition flex items-center gap-2">
-                    <i class="fa-solid fa-floppy-disk"></i> Update
+                    <i class="fa-solid fa-floppy-disk"></i> Simpan
                 </button>
             </div>
         </form>
@@ -287,13 +297,13 @@
 
         ['dragenter', 'dragover'].forEach(eventName => {
             dropZone.addEventListener(eventName, () => {
-                dropZone.classList.add('bg-[#A27B5C]/10', 'border-[#A27B5C]');
+                dropZone.classList.add('bg-stone-100', 'border-stone-400');
             }, false);
         });
 
         ['dragleave', 'drop'].forEach(eventName => {
             dropZone.addEventListener(eventName, () => {
-                dropZone.classList.remove('bg-[#A27B5C]/10', 'border-[#A27B5C]');
+                dropZone.classList.remove('bg-stone-100', 'border-stone-400');
             }, false);
         });
 

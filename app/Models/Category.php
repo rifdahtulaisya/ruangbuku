@@ -8,9 +8,9 @@ class Category extends Model
 {
     protected $fillable = ['category_name'];
 
-    // Category 1 - N Room
-    public function rooms()
+    // Category 1 - N Book
+    public function books()
     {
-        return $this->hasMany(Room::class);
+        return $this->hasMany(Book::class);
     }
 }

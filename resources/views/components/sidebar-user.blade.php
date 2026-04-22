@@ -29,54 +29,48 @@
     </div>
 
     <nav class="px-6 text-sm space-y-2 flex-1 overflow-y-auto">
-        <a href="{{ route('dashboard') }}"
-        class="block -mx-6 transition
+    <a href="{{ route('dashboard') }}"
+    class="block -mx-6 transition
+    {{ Route::is('dashboard') 
+        ? 'bg-[#A27B5C]/20 border-r-4 border-[#A27B5C]' 
+        : 'border-r-4 border-transparent hover:bg-[#A27B5C]/10' }}">
+        <div class="flex items-center gap-4 px-6 py-3
         {{ Route::is('dashboard') 
-            ? 'bg-[#A27B5C]/20 border-r-4 border-[#A27B5C]' 
-            : 'border-r-4 border-transparent hover:bg-[#A27B5C]/10' }}">
+            ? 'text-amber-100 font-semibold' 
+            : 'text-amber-100/70 hover:text-amber-100' }}">
+            <i class="fa-solid fa-chart-line"></i>
+            Dashboard
+        </div>
+    </a>
 
-            <div class="flex items-center gap-4 px-6 py-3
-            {{ Route::is('dashboard') 
-                ? 'text-amber-100 font-semibold' 
-                : 'text-amber-100/70 hover:text-amber-100' }}">
-                
-                <i class="fa-solid fa-chart-line"></i>
-                Dashboard
-            </div>
-        </a>
+    <a href="{{ route('loans') }}"
+    class="block -mx-6 transition
+    {{ Route::is('loans') 
+        ? 'bg-[#A27B5C]/20 border-r-4 border-[#A27B5C]' 
+        : 'border-r-4 border-transparent hover:bg-[#A27B5C]/10' }}">
+        <div class="flex items-center gap-4 px-6 py-3
+        {{ Route::is('loans') 
+            ? 'text-amber-100 font-semibold' 
+            : 'text-amber-100/70 hover:text-amber-100' }}">
+            <i class="fa-solid fa-book-open"></i>
+            Daftar Buku
+        </div>
+    </a>
 
-        <a href="{{ route('bookings') }}"
-        class="block -mx-6 transition
-        {{ Route::is('bookings') 
-            ? 'bg-[#A27B5C]/20 border-r-4 border-[#A27B5C]' 
-            : 'border-r-4 border-transparent hover:bg-[#A27B5C]/10' }}">
-
-            <div class="flex items-center gap-4 px-6 py-3
-            {{ Route::is('bookings') 
-                ? 'text-amber-100 font-semibold' 
-                : 'text-amber-100/70 hover:text-amber-100' }}">
-                
-                <i class="fa-solid fa-screwdriver-wrench"></i>
-                Daftar Ruangan
-            </div>
-        </a>
-
-        <a href="{{ route('bookings.history') }}"
-        class="block -mx-6 transition
-        {{ Route::is('bookings.history') 
-            ? 'bg-[#A27B5C]/20 border-r-4 border-[#A27B5C]' 
-            : 'border-r-4 border-transparent hover:bg-[#A27B5C]/10' }}">
-
-            <div class="flex items-center gap-4 px-6 py-3
-            {{ Route::is('bookings.history') 
-                ? 'text-amber-100 font-semibold' 
-                : 'text-amber-100/70 hover:text-amber-100' }}">
-                
-                <i class="fa-solid fa-screwdriver-wrench"></i>
-                Riwayat Sewa
-            </div>
-        </a>
-    </nav>
+    <a href="{{ route('loans.history') }}"
+    class="block -mx-6 transition
+    {{ Route::is('loans.history') 
+        ? 'bg-[#A27B5C]/20 border-r-4 border-[#A27B5C]' 
+        : 'border-r-4 border-transparent hover:bg-[#A27B5C]/10' }}">
+        <div class="flex items-center gap-4 px-6 py-3
+        {{ Route::is('loans.history') 
+            ? 'text-amber-100 font-semibold' 
+            : 'text-amber-100/70 hover:text-amber-100' }}">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            Riwayat Peminjaman
+        </div>
+    </a>
+</nav>
 
     <div class="px-6 pb-6 space-y-3">
         
@@ -110,7 +104,7 @@
 
                         <p class="text-sm font-semibold text-[#A27B5C] truncate">
 
-                            {{ Auth::user()->name ?? 'Peminjam' }}
+                            {{ Auth::user()->name ?? 'Student' }}
 
                         </p>
 
@@ -120,7 +114,7 @@
 
                     <p class="text-[10px] text-[#A27B5C]/60 truncate flex items-center gap-1">
 
-                        {{ Auth::user()->email ?? 'peminjam@example.com' }}
+                        {{ Auth::user()->email ?? 'student@example.com' }}
 
                     </p>
 

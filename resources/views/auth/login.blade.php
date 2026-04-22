@@ -11,15 +11,17 @@
         </div>
         <div class="p-6 md:p-8 bg-white rounded-2xl shadow-xl border border-gray-100">
             <form action="{{ route('login') }}" method="POST">
-                @csrf <label class="block pl-4 mb-1 text-sm font-medium text-gray-700" for="email">Email</label>
-                <input id="email" name="email" value="{{ old('email') }}" required
+                @csrf 
+                
+                <label class="block pl-4 mb-1 text-sm font-medium text-gray-700" for="username">Username</label>
+                <input id="username" name="username" value="{{ old('username') }}" required
                     class="w-full px-4 py-3 mb-5 outline-none ring-1 ring-gray-200 focus:ring-2 focus:ring-[#A27B5C] shadow-sm rounded-full transition"
-                    type="email" placeholder="nama@email.com" />
-                @error('email')
+                    type="text" placeholder="Masukkan username" />
+                @error('username')
                     <p class="text-red-500 text-xs mt-1 mb-4 pl-4">{{ $message }}</p>
                 @enderror
+                
                 <div class="mb-6" x-data="{ show: false }">
-
                     <div class="flex justify-between items-center mb-1 px-4">
                         <label class="text-sm font-medium text-gray-700" for="password">Password</label>
                         <a href="#" class="text-[#280905] hover:text-[#A27B5C] text-xs font-semibold transition">Lupa
