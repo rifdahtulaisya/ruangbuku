@@ -8,9 +8,6 @@
 <div class="bg-white rounded-xl p-8 shadow-sm border border-slate-100 mb-6">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div class="flex items-center gap-4">
-            <div class="w-16 h-16 flex items-center justify-center rounded-full bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-md">
-                <i class="fa-solid fa-user-astronaut text-2xl"></i>
-            </div>
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold text-slate-800">
                     Selamat Datang, <span class="text-amber-700">{{ Auth::user()->name ?? 'User' }}</span>!

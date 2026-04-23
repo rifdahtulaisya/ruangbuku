@@ -13,89 +13,99 @@ use Carbon\Carbon;
 class UserLoanController extends Controller
 {
     // Di UserLoanController.php, method index()
-public function index(Request $request)
-{
-    $search = $request->input('search');
-    $categoryId = $request->input('category_id');
+    public function index(Request $request)
+    {
+        $search = $request->input('search');
+        $categoryId = $request->input('category_id');
 
-    $query = Book::with('category');
-    
-    // Ambil semua buku yang sedang dipinjam (status pending atau borrowed) oleh user yang sedang login
-    $borrowedBookIds = Loan::where('id_users', Auth::id())
-        ->whereIn('status', ['pending', 'borrowed'])
-        ->pluck('id_books')
-        ->toArray();
+        $query = Book::with('category');
 
-    // Hanya tampilkan buku yang tidak sedang dipinjam oleh user
-    $query->whereNotIn('id', $borrowedBookIds);
+        // Ambil semua buku yang sedang dipinjam (status pending atau borrowed) oleh user yang sedang login
+        $borrowedBookIds = Loan::where('id_users', Auth::id())
+            ->whereIn('status', ['pending', 'borrowed'])
+            ->pluck('id_books')
+            ->toArray();
 
-    if ($search) {
-        $query->where(function ($q) use ($search) {
-            $q->where('title', 'like', "%{$search}%")
-                ->orWhere('author', 'like', "%{$search}%");
-        });
+        // Hanya tampilkan buku yang tidak sedang dipinjam oleh user
+        $query->whereNotIn('id', $borrowedBookIds);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('author', 'like', "%{$search}%");
+            });
+        }
+
+        if ($categoryId) {
+            $query->where('category_id', $categoryId);
+        }
+
+        $books = $query->paginate(12);
+        $categories = Category::all();
+
+        return view('loans', compact('books', 'categories'));
     }
-
-    if ($categoryId) {
-        $query->where('category_id', $categoryId);
-    }
-
-    $books = $query->paginate(12);
-    $categories = Category::all();
-
-    return view('loans', compact('books', 'categories'));
-}
 
     public function store(Request $request)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login')
-                ->with('error', 'Silakan login terlebih dahulu!');
-        }
-
-        $request->validate([
-            'id_books' => 'required|exists:books,id',
-            'tgl_pinjam' => 'required|date|after_or_equal:today',
-            'tgl_kembali_rencana' => 'required|date|after:tgl_pinjam',
-        ]);
-
-        // Cek ketersediaan buku
-        $book = Book::find($request->id_books);
-        if ($book->stock < 1) {
-            return back()->with('error', 'Stok buku tidak tersedia!')->withInput();
-        }
-
-        // Cek apakah buku sudah dipinjam di tanggal tersebut
-        $exists = Loan::where('id_books', $request->id_books)
-            ->whereNotIn('status', ['returned', 'cancelled'])
-            ->where(function ($q) use ($request) {
-                $q->whereBetween('tgl_pinjam', [$request->tgl_pinjam, $request->tgl_kembali_rencana])
-                    ->orWhereBetween('tgl_kembali_rencana', [$request->tgl_pinjam, $request->tgl_kembali_rencana])
-                    ->orWhere(function ($q2) use ($request) {
-                        $q2->where('tgl_pinjam', '<=', $request->tgl_pinjam)
-                            ->where('tgl_kembali_rencana', '>=', $request->tgl_kembali_rencana);
-                    });
-            })
-            ->exists();
-
-        if ($exists) {
-            return back()
-                ->with('error', 'Buku sudah dipinjam di tanggal tersebut!')
-                ->withInput();
-        }
-
-        Loan::create([
-            'id_users' => Auth::id(),
-            'id_books' => $request->id_books,
-            'tgl_pinjam' => $request->tgl_pinjam,
-            'tgl_kembali_rencana' => $request->tgl_kembali_rencana,
-            'status' => 'pending'
-        ]);
-
-        // Redirect ke halaman history dengan notifikasi sukses
-        return redirect()->route('loans.history')
-            ->with('success', 'Peminjaman buku berhasil diajukan!');
+{
+    if (!Auth::check()) {
+        return redirect()->route('login')
+            ->with('error', 'Silakan login terlebih dahulu!');
     }
+
+    $request->validate([
+        'id_books' => 'required|exists:books,id',
+        'tgl_pinjam' => 'required|date',
+        'tgl_kembali_rencana' => 'required|date|after:tgl_pinjam',
+    ]);
+
+    // --- LOGIKA TAMBAHAN: BATASI 7 HARI ---
+    $tglPinjam = Carbon::parse($request->tgl_pinjam);
+    $tglKembali = Carbon::parse($request->tgl_kembali_rencana);
+
+    // Hitung selisih hari
+    $durasi = $tglPinjam->diffInDays($tglKembali);
+
+    // Jika durasi lebih dari 7 hari
+    if ($durasi > 7) {
+        return back()
+            ->with('error', 'Maksimal durasi peminjaman adalah 7 hari!')
+            ->withInput();
+    }
+
+    // Cek ketersediaan buku
+    $book = Book::find($request->id_books);
+    if (!$book || $book->stock < 1) {
+        return back()->with('error', 'Stok buku tidak tersedia!')->withInput();
+    }
+
+    // Cek apakah buku sudah dipinjam di tanggal tersebut
+    $exists = Loan::where('id_books', $request->id_books)
+        ->whereNotIn('status', ['returned', 'cancelled'])
+        ->where(function ($q) use ($request) {
+            $q->where('tgl_pinjam', '<=', $request->tgl_kembali_rencana)
+                ->where('tgl_kembali_rencana', '>=', $request->tgl_pinjam);
+        })
+        ->exists();
+
+    if ($exists) {
+        return back()
+            ->with('error', 'Buku sudah dipinjam di tanggal tersebut!')
+            ->withInput();
+    }
+
+    Loan::create([
+        'id_users' => Auth::id(),
+        'id_books' => $request->id_books,
+        'tgl_pinjam' => $request->tgl_pinjam,
+        'tgl_kembali_rencana' => $request->tgl_kembali_rencana,
+        'status' => 'pending'
+    ]);
+
+    // Redirect ke halaman history dengan notifikasi sukses
+    return redirect()->route('loans.history')
+        ->with('success', 'Peminjaman buku berhasil diajukan!');
+}
 
     public function show($id)
     {
@@ -169,7 +179,7 @@ public function index(Request $request)
 
         // Gunakan waktu Indonesia (WIB)
         $now = Carbon::now('Asia/Jakarta');
-        
+
         // Cek apakah sudah terlambat (gunakan tanggal dari waktu Indonesia)
         $telat = false;
         if ($loan->tgl_kembali_rencana < $now->toDateString()) {
@@ -187,8 +197,8 @@ public function index(Request $request)
             $loan->book->increment('stock');
         }
 
-        return back()->with('success', $telat ? 
-            'Buku berhasil dikembalikan (TERLAMBAT)!' : 
+        return back()->with('success', $telat ?
+            'Buku berhasil dikembalikan (TERLAMBAT)!' :
             'Buku berhasil dikembalikan! Terima kasih.');
     }
 }

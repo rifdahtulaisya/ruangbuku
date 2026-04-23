@@ -181,29 +181,6 @@
                 </div>
             </section>
         </div>
-        {{-- Room Photo --}}
-        <section class="py-12 lg:py-24 overflow-hidden">
-            <div class="container mx-auto px-4">
-                <div class="max-w-6xl mx-auto mb-24 text-center">
-                    <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl tracking-sm mb-16">Our commitment to green
-                        energy is paving the way for a cleaner, healthier planet. </h1>
-                </div>
-                <div class="flex justify-center">
-                    <div class="flex-shrink-0 h-full max-w-xs sm:max-w-md md:max-w-xl mr-4 sm:mr-8"><img
-                            class="block w-full" src="fauna-assets/about/about-image2.png" alt="" /></div>
-                    <div class="flex-shrink-0 h-full max-w-xs sm:max-w-md md:max-w-xl mr-4 sm:mr-8"><img
-                            class="block w-full" src="fauna-assets/about/about-image3.png" alt="" /></div>
-                    <div class="flex-shrink-0 h-full max-w-xs sm:max-w-md md:max-w-xl mr-4 sm:mr-8"><img
-                            class="block w-full" src="fauna-assets/about/about-image4.png" alt="" /></div>
-                    <div class="flex-shrink-0 h-full max-w-xs sm:max-w-md md:max-w-xl mr-4 sm:mr-8"><img
-                            class="block w-full" src="fauna-assets/about/about-image2.png" alt="" /></div>
-                    <div class="hidden md:block sm:flex-shrink-0 h-full max-w-md md:max-w-xl mr-4 sm:mr-8"><img
-                            class="block w-full" src="fauna-assets/about/about-image3.png" alt="" /></div>
-                    <div class="hidden md:block sm:flex-shrink-0 h-full max-w-md md:max-w-xl mr-4 sm:mr-8"><img
-                            class="block w-full" src="fauna-assets/about/about-image4.png" alt="" /></div>
-                </div>
-            </div>
-        </section>
         {{-- Footer --}}
         <section class="relative py-12 lg:py-24 bg-white overflow-hidden">
             <div class="container px-4 mx-auto relative">

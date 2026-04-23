@@ -1,6 +1,6 @@
 @extends('layouts-admin.admin')
 
-@section('title', 'Profil Administrator')
+@section('title', 'PROFIL')
 
 @section('content')
     <div class="pc-content">

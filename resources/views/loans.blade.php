@@ -168,9 +168,9 @@
                                 <i class="fas fa-calendar-alt mr-2 text-amber-600"></i>Tanggal Peminjaman
                             </label>
                             <input type="date" name="tgl_pinjam" id="tgl_pinjam_input" required
-                                class="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-600 focus:border-amber-600 outline-none bg-slate-50">
+                                class="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-600 focus:border-amber-600 outline-none bg-slate-50"
+                                readonly>
                         </div>
-
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-2">
                                 <i class="fas fa-calendar-check mr-2 text-amber-600"></i>Tanggal Pengembalian
@@ -196,58 +196,69 @@
     </div>
 
     <script>
-       function openLoan(id, title, author, categoryName) {
-    const modal = document.getElementById('pinjamModal');
-    const modalBookDetail = document.getElementById('modalBookDetail');
-    const selectedBookId = document.getElementById('selectedBookId');
-    
-    // Ambil waktu saat ini berdasarkan perangkat (Waktu Indonesia)
-    const now = new Date();
-    
-    // Format YYYY-MM-DD menggunakan standar lokal (en-CA menghasilkan format yang pas untuk input date)
-    const today = now.toLocaleDateString('en-CA'); 
-    
-    // Hitung tanggal besok untuk minimal pengembalian
-    const tomorrow = new Date(now);
-    tomorrow.setDate(now.getDate() + 1);
-    const tomorrowStr = tomorrow.toLocaleDateString('en-CA');
+        function openLoan(id, title, author, categoryName) {
+            const modal = document.getElementById('pinjamModal');
+            const modalBookDetail = document.getElementById('modalBookDetail');
+            const selectedBookId = document.getElementById('selectedBookId');
 
-    const tglPinjamInput = document.getElementById('tgl_pinjam_input');
-    const tglKembaliInput = document.getElementById('tgl_kembali_input');
+            // Ambil waktu saat ini berdasarkan perangkat (Waktu Indonesia)
+            const now = new Date();
 
-    if (tglPinjamInput) {
-        // Ini akan mengisi tanggal 23 jika di HP/Laptop kamu sudah tanggal 23
-        tglPinjamInput.value = today; 
-        tglPinjamInput.min = today;
-    }
+            // Format YYYY-MM-DD menggunakan standar lokal (en-CA menghasilkan format yang pas untuk input date)
+            const today = now.toLocaleDateString('en-CA');
 
-    if (tglKembaliInput) {
-        tglKembaliInput.value = '';     
-        tglKembaliInput.min = tomorrowStr; 
-    }
+            // Hitung tanggal maksimal (hari ini + 6 hari untuk total 7 hari)
+            const maxReturnDate = new Date(now);
+            maxReturnDate.setDate(now.getDate() + 6);
+            const maxReturnDateStr = maxReturnDate.toLocaleDateString('en-CA');
 
-    // Update Detail Buku
-    modalBookDetail.innerHTML = `
-        <div class="space-y-2">
-            <div class="grid grid-cols-[100px_1fr] items-baseline">
-                <span class="text-slate-500 text-sm">Judul Buku:</span>
-                <span class="font-bold text-amber-900">${title}</span>
-            </div>
-            <div class="grid grid-cols-[100px_1fr] items-baseline">
-                <span class="text-slate-500 text-sm">Pengarang:</span>
-                <span class="text-slate-700">${author}</span>
-            </div>
-            <div class="grid grid-cols-[100px_1fr] items-baseline">
-                <span class="text-slate-500 text-sm">Kategori:</span>
-                <span class="text-slate-700">${categoryName}</span>
-            </div>
-        </div>
-    `;
+            // Hitung tanggal besok untuk minimal pengembalian
+            const tomorrow = new Date(now);
+            tomorrow.setDate(now.getDate() + 1);
+            const tomorrowStr = tomorrow.toLocaleDateString('en-CA');
 
-    selectedBookId.value = id;
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
+            const tglPinjamInput = document.getElementById('tgl_pinjam_input');
+            const tglKembaliInput = document.getElementById('tgl_kembali_input');
+
+            if (tglPinjamInput) {
+                // Set tanggal peminjaman dengan hari ini
+                tglPinjamInput.value = today;
+                tglPinjamInput.readOnly = true; // Hanya readonly, bukan disabled
+                tglPinjamInput.style.backgroundColor = '#f3f4f6'; // Warna abu-abu untuk indikasi readonly
+                tglPinjamInput.style.cursor = 'not-allowed';
+            }
+
+            if (tglKembaliInput) {
+                tglKembaliInput.value = '';
+                tglKembaliInput.min = tomorrowStr;
+                tglKembaliInput.max = maxReturnDateStr; // Batas maksimal 7 hari (hari ini + 6)
+                tglKembaliInput.removeAttribute('readonly');
+                tglKembaliInput.removeAttribute('disabled');
+            }
+
+            // Update Detail Buku
+            modalBookDetail.innerHTML = `
+                <div class="space-y-2">
+                    <div class="grid grid-cols-[100px_1fr] items-baseline">
+                        <span class="text-slate-500 text-sm">Judul Buku:</span>
+                        <span class="font-bold text-amber-900">${title}</span>
+                    </div>
+                    <div class="grid grid-cols-[100px_1fr] items-baseline">
+                        <span class="text-slate-500 text-sm">Pengarang:</span>
+                        <span class="text-slate-700">${author}</span>
+                    </div>
+                    <div class="grid grid-cols-[100px_1fr] items-baseline">
+                        <span class="text-slate-500 text-sm">Kategori:</span>
+                        <span class="text-slate-700">${categoryName}</span>
+                    </div>
+                </div>
+            `;
+
+            selectedBookId.value = id;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
         function closePinjamModal() {
             document.getElementById('pinjamModal').classList.add('hidden');
             document.getElementById('pinjamModal').classList.remove('flex');
@@ -279,6 +290,45 @@
         // ESC to close
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape') closePinjamModal();
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputPinjam = document.querySelector('input[name="tgl_pinjam"]');
+            const inputKembali = document.querySelector('input[name="tgl_kembali_rencana"]');
+
+            function updateDateLimits() {
+                if (inputPinjam.value) {
+                    let startDate = new Date(inputPinjam.value);
+
+                    // Hitung Tanggal Minimal (H+1 setelah pinjam)
+                    let minDate = new Date(startDate);
+                    minDate.setDate(startDate.getDate() + 1);
+
+                    // Hitung Tanggal Maksimal (H+6 setelah pinjam, total 7 hari termasuk hari pinjam)
+                    let maxDate = new Date(startDate);
+                    maxDate.setDate(startDate.getDate() + 6);
+
+                    // Format ke YYYY-MM-DD untuk atribut input date
+                    const minStr = minDate.toISOString().split('T')[0];
+                    const maxStr = maxDate.toISOString().split('T')[0];
+
+                    inputKembali.min = minStr;
+                    inputKembali.max = maxStr;
+
+                    // Jika tanggal yang sudah terpilih sebelumnya melebihi batas baru, kosongkan
+                    if (inputKembali.value && (inputKembali.value > maxStr || inputKembali.value < minStr)) {
+                        inputKembali.value = '';
+                    }
+                }
+            }
+
+            // Jalankan saat pertama kali halaman dimuat (untuk handle nilai default tgl hari ini)
+            updateDateLimits();
+
+            // Jalankan setiap kali input tanggal pinjam diubah
+            if (inputPinjam) {
+                inputPinjam.addEventListener('change', updateDateLimits);
+            }
         });
     </script>
 

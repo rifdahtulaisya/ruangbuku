@@ -1,6 +1,6 @@
 @extends('layouts-admin.admin')
 
-@section('title', 'Loans')
+@section('title', 'TRANSAKSI')
 
 @section('content')
 
@@ -99,7 +99,8 @@
     </a>
 
   <a href="{{ route('admin.loans.create') }}" class="block group h-full">
-    <div class="bg-gradient-to-br from-[#A27B5C] to-[#8B6348] rounded-xl shadow p-4 hover:shadow-lg transition-all duration-300 cursor-pointer h-full">
+    <div class="bg-sky-600 hover:bg-sky-700
+                text-white rounded-xl shadow p-4 hover:shadow-lg transition-all duration-300 cursor-pointer h-full">
         <div class="flex items-center justify-between h-full">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 flex items-center justify-center rounded-lg bg-white/20 text-white group-hover:scale-110 transition-transform duration-300 shrink-0">
@@ -203,7 +204,7 @@
                 class="relative w-full sm:w-80">
                 <div class="relative">
                     <input type="text" name="search" id="searchInput" value="{{ request('search') }}"
-                        placeholder="Cari nama peminjam atau judul buku..."
+                        placeholder="Cari Transaksi..."
                         class="w-full pl-10 pr-4 py-2.5 border border-stone-300 rounded-lg 
                         focus:outline-none focus:ring-2 focus:ring-[#A27B5C] focus:border-[#A27B5C]">
                     <i class="fa-solid fa-search absolute left-3 top-3.5 text-stone-400"></i>
@@ -228,7 +229,7 @@
                 @foreach ([5, 10, 15, 20] as $perPage)
                     <a href="{{ route('admin.loans.index', array_merge(request()->except('page'), ['per_page' => $perPage])) }}"
                         class="px-3 py-1 rounded-md text-sm font-medium transition
-                        {{ request('per_page', 5) == $perPage ? 'bg-[#A27B5C] text-white shadow' : 'text-stone-600 hover:text-[#A27B5C]' }}">
+                        {{ request('per_page', 5) == $perPage ? 'bg-sky-600 text-white shadow' : 'text-slate-600 hover:text-sky-600' }}">
                         {{ $perPage }}
                     </a>
                 @endforeach
@@ -337,13 +338,6 @@
 
                         <td class="px-6 py-4">
                             <div class="flex justify-center gap-2">
-                                <!-- Edit Button -->
-                                <a href="{{ route('admin.loans.edit', $item->id) }}"
-                                    class="w-8 h-8 flex items-center justify-center rounded-lg 
-                                        bg-amber-100 text-amber-600 hover:bg-amber-200 transition-all duration-200"
-                                    title="Edit">
-                                    <i class="fa-solid fa-pencil text-sm"></i>
-                                </a>
 
                                 <!-- View Button -->
                                 <a href="{{ route('admin.loans.show', $item->id) }}"

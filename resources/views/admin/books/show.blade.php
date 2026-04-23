@@ -1,6 +1,6 @@
 @extends('layouts-admin.admin')
 
-@section('title', 'Book Detail')
+@section('title', 'BOOK')
 
 @section('content')
     <!-- HEADER BOX -->

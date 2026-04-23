@@ -1,6 +1,6 @@
 @extends('layouts-admin.admin')
 
-@section('title', 'Loan Create')
+@section('title', 'TRANSAKSI')
 
 @section('content')
     <div class="bg-white rounded-xl shadow p-5 mb-6">
