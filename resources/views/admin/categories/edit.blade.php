@@ -47,7 +47,7 @@
                     class="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-lg
                            transition font-medium shadow-sm flex items-center">
                 <i class="fa-solid fa-save mr-2"></i>
-                Simpan
+                Update
             </button>
         </div>
     </form>

@@ -54,6 +54,12 @@ class BookSeeder extends Seeder
                 'image' => 'books/5.png',
                 'stock' => 1,
             ],
+            [
+                'title' => 'The Moonlit Portico of The Bellavere',
+                'author' => 'Avery Davis',
+                'image' => 'books/6.png',
+                'stock' => 1,
+            ],
         ];
 
         foreach ($books as $bookData) {

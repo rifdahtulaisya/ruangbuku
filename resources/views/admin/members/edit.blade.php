@@ -118,7 +118,7 @@
                 <button type="submit"
                     class="px-5 py-2.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white
                        transition flex items-center gap-2">
-                    <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan
+                    <i class="fa-solid fa-floppy-disk"></i> Update
                 </button>
             </div>
         </form>
